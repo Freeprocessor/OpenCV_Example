@@ -7,6 +7,7 @@
 using namespace cv;
 using namespace std;
 
+// 트랙바 생성시 요구하는 콜백 함수 정의
 void dummy(int, void*)
 {
 
@@ -94,6 +95,9 @@ int main()
 	namedWindow("img_color");
 	// 윈도우에 마우스 콜백 함수를 등록
 	setMouseCallback("img_color", mouse_callback);
+	// 트렉바를 변수 threshold1에 연결하여 생성(최대 255), 초기값은 30
+	createTrackbar("threshold", "img_color", &threshold1, 255, dummy);
+	setTrackbarPos("threshold", "img_color", 30);
 
 
 	Mat img_hsv;
@@ -111,6 +115,10 @@ int main()
 	{
 		// 비디오 캡쳐 객체 리드 함수를 사용하여 카메라로부터 이미지를 가져옴
 		cap.read(img_color);
+
+		// 트랙바 이동 시 파킹 값을 가져옴, 마우스 클릭 시 콜백 함수에서 범위가 업데이트 되어 사용됨
+		threshold1 = getTrackbarPos("threshold", "img_color");
+
 		// 이미지를 비주얼 색 공간에서 HVS 색 공간으로 변환
 		cvtColor(img_color, img_hsv, COLOR_BGR2HSV);
 
